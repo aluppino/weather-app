@@ -1,5 +1,5 @@
-var weather = require('./weather.js');
-var location = require('./location.js');
+var weather = require('./helpers/weather.js');
+var location = require('./helpers/location.js');
 
 var argv = require('yargs')
 	.option({

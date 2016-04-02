@@ -1,5 +1,5 @@
 var request = require('request');
-var config = require('./config.js');
+var config = require('../config.js');
 
 var URL_BEGINNING = 'http://api.openweathermap.org/data/2.5/weather?';
 var API_KEY = config.openweathermap.apiKey;

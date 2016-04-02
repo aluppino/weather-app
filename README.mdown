@@ -2,7 +2,7 @@
 Node.js based temperature lookup by city and zip code
 
 ## Configuration
-api.openweathermap.org requires an API key. A key can be obtained by creating a free or enterprise account. Provide this key in weather.js to run the weather app.
+api.openweathermap.org requires an API key. A key can be obtained by creating a free or enterprise account. Provide this key in helpers/weather.js to run the weather app.
 
 ## Usage
 Get the temperature from a city name (use quotes if city name contains a space):
