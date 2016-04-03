@@ -19,57 +19,35 @@ var argv = require('yargs')
 	.help('help')
 	.argv;
 
-var command = argv._[0];
+console.log('*** STARTING WEATHER APP ***\n');
 
 if (typeof argv.city === 'string' && argv.city.length > 0) {
-	weather.getWeatherFromCity(argv.city, function(error, weather) {
-		if (error) {
-			console.log('Error getting weather at \'' + argv.city + '\'.');
-			return;
-		}
-
-		if (weather.cod !== 200) {
-			console.log(weather.message);
-			return;
-		}
-		
-		console.log('It is currently ' + weather.main.temp + '\u00B0F in ' + weather.name + '.');
+	console.log('*** Attempting to get temperature in city ' + argv.city + '...');
+	weather.getWeatherFromCity(argv.city).then(function(data) {
+		weather.logTemperature(data);
+	}, function(error) {
+		console.log(error);
 	});
 } else if (typeof argv.zip === 'number') {
-	weather.getWeatherFromZip(argv.zip, function(error, weather) {
-		if (error) {
-			console.log('Error getting weather at \'' + argv.zip + '\'.');
-			return;
-		}
-
-		if (weather.cod !== 200) {
-			console.log(weather.message);
-			return;
-		}
-		
-		console.log('It is currently ' + weather.main.temp + '\u00B0F in ' + weather.name + '.');
-	});
+	console.log('*** Attempting to get temperature in zip code ' + argv.zip + '...');
+	weather.getWeatherFromZip(argv.zip).then(function(data) {
+		weather.logTemperature(data);
+	}, function(error) {
+		console.log(error);
+	});	
 } else {
-	var currentLocation;
-	location.getLocation(function(error, city) {
-		if (error) {
-			console.log('Location not provided; unable to get current location.');
-			return;
-		}
-
-		currentLocation = city.postal;
-		weather.getWeatherFromZip(currentLocation, function(error, weather) {
-			if (error) {
-				console.log('Error getting weather at \'' + currentLocation + '\'.');
-				return;
-			}
-
-			if (weather.cod !== 200) {
-				console.log(weather.message);
-				return;
-			}
-			
-			console.log('It is currently ' + weather.main.temp + '\u00B0F in ' + weather.name + '.');
+	console.log('*** Attempting to get current location...');
+	location.getLocation().then(function(data) {
+		var currentLocation = data.postal;
+		console.log('Success.');
+		console.log('Current location is ' + currentLocation + '.\n');
+		console.log('*** Attempting to get temperature in zip code ' + currentLocation + '...');
+		weather.getWeatherFromZip(currentLocation).then(function(data) {
+			weather.logTemperature(data);
+		}, function(error) {
+			console.log(error);
 		});
+	}, function(error) {
+		console.log(error);
 	});
 }
