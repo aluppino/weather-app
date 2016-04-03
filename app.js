@@ -26,7 +26,9 @@ if (typeof argv.city === 'string' && argv.city.length > 0) {
 	console.log('*** Attempting to get temperature in city ' + argv.city + '...');
 	weather.getWeatherFromCity(argv.city).then(function(data) {
 		weather.logTemperature(data);
-	}, function(error) { console.log(error); });
+	})
+
+	.catch(function(error) { console.log(error); });
 }
 
 // Zip code is provided
@@ -34,7 +36,9 @@ else if (typeof argv.zip === 'number') {
 	console.log('*** Attempting to get temperature in zip code ' + argv.zip + '...');
 	weather.getWeatherFromZip(argv.zip).then(function(data) {
 		weather.logTemperature(data);
-	}, function(error) { console.log(error); });
+	})
+
+	.catch(function(error) { console.log(error); });
 }
 
 // Neither city name nor zip code is provided
@@ -47,9 +51,11 @@ else {
 
 		console.log('*** Attempting to get temperature in zip code ' + currentLocation + '...');
 		return weather.getWeatherFromZip(currentLocation);
-	}, function(error) { console.log(error); })
+	})
 
 	.then(function(data) {
 		weather.logTemperature(data);
-	}, function(error) { console.log(error); });
+	})
+
+	.catch(function(error) { console.log(error); });
 }
