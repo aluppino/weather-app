@@ -21,33 +21,35 @@ var argv = require('yargs')
 
 console.log('*** STARTING WEATHER APP ***\n');
 
+// City name is provided
 if (typeof argv.city === 'string' && argv.city.length > 0) {
 	console.log('*** Attempting to get temperature in city ' + argv.city + '...');
 	weather.getWeatherFromCity(argv.city).then(function(data) {
 		weather.logTemperature(data);
-	}, function(error) {
-		console.log(error);
-	});
-} else if (typeof argv.zip === 'number') {
+	}, function(error) { console.log(error); });
+}
+
+// Zip code is provided
+else if (typeof argv.zip === 'number') {
 	console.log('*** Attempting to get temperature in zip code ' + argv.zip + '...');
 	weather.getWeatherFromZip(argv.zip).then(function(data) {
 		weather.logTemperature(data);
-	}, function(error) {
-		console.log(error);
-	});	
-} else {
-	console.log('*** Attempting to get current location...');
+	}, function(error) { console.log(error); });
+}
+
+// Neither city name nor zip code is provided
+else {
+	console.log('*** No location provided. Attempting to get current location...');
 	location.getLocation().then(function(data) {
 		var currentLocation = data.postal;
 		console.log('Success.');
 		console.log('Current location is ' + currentLocation + '.\n');
+
 		console.log('*** Attempting to get temperature in zip code ' + currentLocation + '...');
-		weather.getWeatherFromZip(currentLocation).then(function(data) {
-			weather.logTemperature(data);
-		}, function(error) {
-			console.log(error);
-		});
-	}, function(error) {
-		console.log(error);
-	});
+		return weather.getWeatherFromZip(currentLocation);
+	}, function(error) { console.log(error); })
+
+	.then(function(data) {
+		weather.logTemperature(data);
+	}, function(error) { console.log(error); });
 }
